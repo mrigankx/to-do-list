@@ -21,7 +21,7 @@ const item1 = new Item({
   name: "Click the + button to add items"
 });
 const item2 = new Item({
-  name: "<-Check this box to delete item"
+  name: "Click the checkbox to delete item"
 });
 
 const defaultItems = [item1, item2];
