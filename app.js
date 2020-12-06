@@ -18,10 +18,10 @@ const itemSchema = new mongoose.Schema({
 const Item = mongoose.model("Item", itemSchema); 
 
 const item1 = new Item({
-  name: "Example 1"
+  name: "Click the + button to add items--->"
 });
 const item2 = new Item({
-  name: "Example 2"
+  name: "Check this box to delete item"
 });
 
 const defaultItems = [item1, item2];
