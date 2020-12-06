@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
+var _ = require('lodash');
 app.use(bodyParser.urlencoded(
   { extended: "true" }
 ));
@@ -17,15 +18,18 @@ const itemSchema = new mongoose.Schema({
 const Item = mongoose.model("Item", itemSchema); 
 
 const item1 = new Item({
-  name: "buy apple"
+  name: "Example 1"
 });
 const item2 = new Item({
-  name: "buy mango"
+  name: "Example 2"
 });
-const item3 = new Item({
-  name: "buy tea"
-});
-const defaultItems = [item1, item2, item3];
+
+const defaultItems = [item1, item2];
+const listSchema = {
+  name: String,
+  items: [itemSchema]
+};
+const List = mongoose.model("List", listSchema);
 
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
@@ -43,7 +47,7 @@ app.get("/", (req, res) => {
              res.redirect("/"); 
     }
     else {
-      res.render("list", { todayDate: "Today", allItems: foundItems });
+      res.render("list", { title: "Today", allItems: foundItems });
 
     }
   });
@@ -51,21 +55,66 @@ app.get("/", (req, res) => {
  });
 app.post("/", (req, res) => {
   let newItem = req.body.newItem;
-
-    const item = new Item({
+  const listName = req.body.button;
+  const item = new Item({
     name: newItem
+  });
+  if (listName === "Today") {
+    item.save();
+    res.redirect("/");
+  }
+  else {
+    List.findOne({ name: listName }, (err, foundList) => {
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/" + listName);
     });
-  item.save();
-  res.redirect("/");
-
+  }
+  
 });
-app.get("/work", (req, res) => {
+app.post("/delete", (req, res)=>{
+  const id = req.body.deleteItem;
+  const listName = req.body.listName;
+  if (listName === "Today")
+  {
+     Item.findByIdAndRemove(id, (err) => {
+    if (err)
+      console.log(err);
+    
+    res.redirect("/");
+  });
+  }
+  else {
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: id}}}, (err, result) => {
+      if (!err) {
+        res.redirect("/"+ listName);
+      }
+    });
+  }
  
-  res.render("list", { todayDate: "Work List", allItems: workItems });
 });
-app.get("/about", (req, res) => { 
-  res.render("about");
+app.get("/:listname", (req, res) => {
+  const customList = _.capitalize(req.params.listname);
+  List.findOne({ name: customList }, (err, result) => {
+    if (!err) {
+      if (!result)
+      { 
+        const list = new List({
+            name: customList,
+            items: defaultItems
+          });
+        list.save();
+        res.redirect("/" + customList);
+      }
+      else {
+        res.render("list", { title: result.name, allItems: result.items });
+      }
+    }
+  });
+ 
 });
+
+
 app.listen(port, function () {
   console.log("Server started on port:" + port);
 });

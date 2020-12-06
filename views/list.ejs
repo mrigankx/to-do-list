@@ -1,17 +1,21 @@
 <%- include('header') -%>
 <div class="box" id="heading">
-    <h1><%= todayDate %> </h1>
+    <h1><%= title %> </h1>
 </div>
 <div class="box">
     <form class="item" action="/" method="post">
-        <input type="text" name="newItem" placeholder="New Item" autocomplete="off" />
-        <button type="submit" name="button" value=<%= todayDate %>>+</button>
+        <input type="text" name="newItem" placeholder="Enter New Item Here" autocomplete="off" />
+        <button type="submit" name="button" value=<%= title %>>+</button>
     </form>
     <% for(var i in allItems) {%>
-    <div class="item">
-        <input type="checkbox">
-        <p contentEditable="true"> <%=allItems[i].name%> </>
-    </div>
+    <form action="/delete" method="post">
+        <div class="item">
+            <input type="checkbox" name="deleteItem" value="<%=allItems[i]._id%>" onchange="this.form.submit()">
+
+            <p contentEditable="true"> <%=allItems[i].name%> </>
+        </div>
+        <input type="hidden" name="listName" value="<%=title%>" /> 
+    </form>
     <% } %>
 
 </div>
