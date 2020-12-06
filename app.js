@@ -18,7 +18,7 @@ const itemSchema = new mongoose.Schema({
 const Item = mongoose.model("Item", itemSchema); 
 
 const item1 = new Item({
-  name: "Click the + button to add items--->"
+  name: "Click the + button to add items-^"
 });
 const item2 = new Item({
   name: "Check this box to delete item"
