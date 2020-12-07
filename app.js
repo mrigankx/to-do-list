@@ -35,6 +35,14 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
+  res.render("login");
+});
+app.post("/", (req, res) => {
+  const username = req.body.username;
+  res.redirect("/" + username);
+});
+
+app.get("/home", (req, res) => {
   
   Item.find((err, foundItems) => {
     if (foundItems.length === 0) {
@@ -44,7 +52,7 @@ app.get("/", (req, res) => {
   }
 
       });
-             res.redirect("/"); 
+             res.redirect("/home"); 
     }
     else {
       res.render("list", { title: "Today", allItems: foundItems });
@@ -53,7 +61,7 @@ app.get("/", (req, res) => {
   });
 
  });
-app.post("/", (req, res) => {
+app.post("/home", (req, res) => {
   let newItem = req.body.newItem;
   const listName = req.body.button;
   const item = new Item({
@@ -61,7 +69,7 @@ app.post("/", (req, res) => {
   });
   if (listName === "Today") {
     item.save();
-    res.redirect("/");
+    res.redirect("/home");
   }
   else {
     List.findOne({ name: listName }, (err, foundList) => {
@@ -81,7 +89,7 @@ app.post("/delete", (req, res)=>{
     if (err)
       console.log(err);
     
-    res.redirect("/");
+    res.redirect("/home");
   });
   }
   else {
