@@ -9,6 +9,9 @@ app.use(bodyParser.urlencoded(
   { extended: "true" }
 ));
 
+app.set('view engine', 'ejs');
+app.use(express.static("public"));
+
 mongoose.connect("mongodb+srv://mrigankx:test@cluster0.khu7t.mongodb.net/todolistDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true });
 
 const itemSchema = new mongoose.Schema({
@@ -30,9 +33,6 @@ const listSchema = {
   items: [itemSchema]
 };
 const List = mongoose.model("List", listSchema);
-
-app.set('view engine', 'ejs');
-app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.render("login");
