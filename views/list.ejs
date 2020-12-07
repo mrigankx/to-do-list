@@ -2,9 +2,12 @@
 <div class="box" id="heading">
     <h1><%= title %> </h1>
 </div>
+<form action="/logout" method="post" class="logoutform">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
 <div class="box">
     <form class="item" action="/home" method="post">
-        <input type="text" name="newItem" placeholder="Enter New Item Here" autocomplete="off" />
+        <input type="text" name="newItem" placeholder="Enter New Item Here" autocomplete="off" required />
         <button type="submit" name="button" class="addButton" value=<%= title %>>+</button>
     </form>
     <% for(var i in allItems) {%>

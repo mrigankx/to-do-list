@@ -95,6 +95,21 @@ input[type="text"]:focus {
   box-shadow: inset 0 -3px 0 0 #a683e3;
 }
 
+.logoutform button {
+  height: auto;
+  width: 80px;
+  border-radius: 5px;
+  float: right;
+  position: relative;
+  top: -100px;
+  font-size: 16px;
+}
+.logoutform button:hover {
+  background-color: red;
+  border: 1px solid;
+  box-shadow: 5px 8px #888888;
+}
+
 ::placeholder {
   color: grey;
   opacity: 1;

@@ -121,7 +121,9 @@ app.get("/:listname", (req, res) => {
   });
  
 });
-
+app.post("/logout", (req, res) => {
+  res.redirect("/");
+});
 
 app.listen(port, function () {
   console.log("Server started on port:" + port);
